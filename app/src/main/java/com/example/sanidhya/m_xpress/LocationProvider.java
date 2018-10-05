@@ -22,7 +22,7 @@ public class LocationProvider extends ContentProvider {
         UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         return uriMatcher;
     }
-    String[] locationsList = new String[]{""};
+    String[] locationsList = new String[]{"sadf", "Ali", "Ameya"};
 
     @Override
     public boolean onCreate() {

@@ -7,8 +7,14 @@ import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.sanidhya.m_xpress.Adapters.FeedListAdapter;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
@@ -16,8 +22,15 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
@@ -51,21 +64,22 @@ public class LoginActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 editor = getSharedPreferences(Constants.PREFERENCES, MODE_PRIVATE).edit();
                 editor.putString(Constants.USER_EMAIL_PREF, firebaseAuth.getCurrentUser().getEmail());
-                firebaseAuth.getCurrentUser().getUid();
-
                 editor.putString(Constants.USERNAME_PREF, firebaseAuth.getCurrentUser().getDisplayName());
                 editor.putString(Constants.PIC_URI_PREF, String.valueOf(firebaseAuth.getCurrentUser().getPhotoUrl()));
+                firebaseAuth.getCurrentUser().getIdToken(true)
+                        .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                            public void onComplete(@NonNull Task<GetTokenResult> task) {
+                                if (task.isSuccessful()) {
+                                    String idToken = task.getResult().getToken();
+                                    editor.putString(Constants.UID_PREF, idToken);
+                                } else {
+                                    // Handle error -> task.getException();
+                                }
+                            }
+                        });
+
                 editor.apply();
-//                FirebaseUserMetadata metadata = firebaseAuth.getCurrentUser().getMetadata();
-//                if (metadata != null) {
-//                    if (metadata.getCreationTimestamp() == metadata.getLastSignInTimestamp()) {
-//                        // The user is new
-//                    } else {
-//                        // This is an existing user
-//                    }
-//                }
-//                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//                startActivity(intent);
+                send_uid();
             } else {
                 if (response == null) {
                     Toast.makeText(this, "Sign in cancelled", Toast.LENGTH_SHORT).show();
@@ -77,12 +91,9 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 Toast.makeText(this, "Unknown error", Toast.LENGTH_SHORT).show();
                 Log.e(TAG, "Sign-in error: ", response.getError());
-//                Intent intent = new Intent(LoginActivity.this, LoginActivity.class);
-//                startActivity(intent);
             }
         }
-//        Intent intent = new Intent(this, MainActivity.class);
-//        startActivity(intent);
+        onBackPressed();
     }
 
 
@@ -107,14 +118,22 @@ public class LoginActivity extends AppCompatActivity {
                 editor.putString(Constants.USER_EMAIL_PREF, user.getEmail());
                 editor.putString(Constants.USERNAME_PREF, user.getDisplayName());
                 editor.putString(Constants.PIC_URI_PREF, String.valueOf(user.getPhotoUrl()));
-                user.getIdToken(true);
-                user.getUid();
+                firebaseAuth.getCurrentUser().getIdToken(true)
+                        .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                            public void onComplete(@NonNull Task<GetTokenResult> task) {
+                                if (task.isSuccessful()) {
+                                    String idToken = task.getResult().getToken();
+                                    editor.putString(Constants.UID_PREF, idToken);
+                                } else {
+                                    // Handle error -> task.getException();
+                                }
+                            }
+                        });
                 editor.apply();
+                send_uid();
                 Log.e(TAG, "onActivityResult: pic url = " + user.getPhotoUrl());
                 Log.e(TAG, "onActivityResult: name = " + user.getDisplayName());
                 Log.e(TAG, "onActivityResult: email = " + user.getEmail());
-//                Intent intent = new Intent(this, MainActivity.class);
-//                startActivity(intent);
             } else {
                 AuthUI.IdpConfig googleIdp = new AuthUI.IdpConfig.GoogleBuilder()
                         .build();
@@ -128,6 +147,21 @@ public class LoginActivity extends AppCompatActivity {
                                 .build(),
                         Constants.RC_SIGN_IN);
             }
+            onBackPressed();
         };
+    }
+    void send_uid() {
+        SharedPreferences sp = getSharedPreferences(Constants.PREFERENCES, MODE_PRIVATE);
+        String TokenID = sp.getString(Constants.UID_PREF, null);
+        if(TokenID != null) {
+            RequestQueue queue = Volley.newRequestQueue(this);
+            String URL = Constants.LOGIN_URL; // TODO
+            StringRequest sr = new StringRequest(Request.Method.GET, URL, response -> {
+                Log.e(TAG, "onResponse: " + response);
+            }, error -> Toast.makeText(this, "That didn't work!", Toast.LENGTH_SHORT).show());
+            queue.add(sr);
+
+        }
+
     }
 }

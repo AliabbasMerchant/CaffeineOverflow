@@ -7,9 +7,11 @@ public class Constants {
     public static final String USER_EMAIL_PREF = "UserEmailPreference";
     public static final String USERNAME_PREF = "UserNamePreference";
     public static final String PIC_URI_PREF = "PicURIPreference";
+    public static final String UID_PREF = "UID_Preference";
     public static final int RC_SIGN_IN = 123;
 
     public static final String FEED_URL = "";
     public static final String UPLOAD_URL =  "";
+    public static final String LOGIN_URL = "";
 
 }
