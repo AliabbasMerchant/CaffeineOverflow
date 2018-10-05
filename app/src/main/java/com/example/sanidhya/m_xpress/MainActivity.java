@@ -34,6 +34,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        handleIntent(getIntent());
+
+
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -108,13 +112,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//
-//    }
-
     @Override
     protected void onNewIntent(Intent intent) {
         setIntent(intent);
@@ -131,7 +128,8 @@ public class MainActivity extends AppCompatActivity {
             Log.e(TAG, "handleIntent: skill = " + skill);
             Uri data = intent.getData();
             Log.e(TAG, "handleIntent: data = " + data);
-//            addSkill(skill);
+
+            // TODO
         }
     }
 
