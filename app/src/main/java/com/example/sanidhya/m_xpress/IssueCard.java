@@ -2,6 +2,7 @@ package com.example.sanidhya.m_xpress;
 
 import android.content.Context;
 import android.support.constraint.ConstraintLayout;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -10,7 +11,7 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class IssueCard extends ConstraintLayout {
+public class IssueCard extends CardView {
     JSONObject data;
     TextView issue_title, upvote_count, comment_count, location, issue_category, timestamp;
     ImageView issue_image;
