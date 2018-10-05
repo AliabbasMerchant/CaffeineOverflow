@@ -107,6 +107,8 @@ public class LoginActivity extends AppCompatActivity {
                 editor.putString(Constants.USER_EMAIL_PREF, user.getEmail());
                 editor.putString(Constants.USERNAME_PREF, user.getDisplayName());
                 editor.putString(Constants.PIC_URI_PREF, String.valueOf(user.getPhotoUrl()));
+                user.getIdToken(true);
+                user.getUid();
                 editor.apply();
                 Log.e(TAG, "onActivityResult: pic url = " + user.getPhotoUrl());
                 Log.e(TAG, "onActivityResult: name = " + user.getDisplayName());

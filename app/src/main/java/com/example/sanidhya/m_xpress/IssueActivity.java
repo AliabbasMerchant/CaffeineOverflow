@@ -8,7 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,7 +23,9 @@ public class IssueActivity extends AppCompatActivity {
     int _id = 1;
     private static final String TAG = "IssueActivity";
 
-    TextView upvote_count;
+    SwipeRefreshLayout mySwipeRefreshLayout;
+    TextView issue_title, upvote_count, comment_count, location, issue_category, timestamp, issue_desc;
+    ImageView issue_image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,20 +36,56 @@ public class IssueActivity extends AppCompatActivity {
         if(intent.getData() != null) {
             try {
                 generalData = new JSONObject(intent.getStringExtra("data"));
-                _id = generalData.getInt("_id"); // TODO
+                _id = generalData.getInt("card_id");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
         getComments(_id);
+
+        issue_title = findViewById(R.id.issue_title);
+        issue_image = findViewById(R.id.issue_image);
+        timestamp = findViewById(R.id.timestamp);
+        issue_category = findViewById(R.id.issue_category);
+        issue_desc = findViewById(R.id.issue_desc);
+        upvote_count = findViewById(R.id.upvote_count);
+        location = findViewById(R.id.location);
+
         inflateGeneralData();
         inflateComments();
         userHasVoted = hasUserVoted(_id);
         if(userHasVoted) {
             upvote_count.setTextColor(getResources().getColor(R.color.upvoteColor));
         }
+
+
+        mySwipeRefreshLayout.setOnRefreshListener( () -> {
+                    Log.i(TAG, "onRefresh called from SwipeRefreshLayout");
+
+                    // This method performs the actual data-refresh operation.
+                    // The method calls setRefreshing(false) when it's finished.
+                    getComments(_id);
+                    inflateComments();
+                }
+        );
     }
     public void inflateGeneralData() {
+
+
+        try {
+            issue_title.setText(generalData.getString("title"));
+            issue_desc.setText(generalData.getString("description"));
+            Picasso.get()
+                    .load(generalData.getString("image"))
+                    .into(issue_image);
+            location.setText(generalData.getString("ward"));
+            issue_category
+            upvote_count.setText(generalData.getString("upvotes"));
+            timestamp.setText(generalData.getString("timestamp"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
     public void inflateComments() {
 //        todo
@@ -72,8 +113,8 @@ public class IssueActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         try {
-            if(generalData.getInt("UpvoteCount")!= votes) {
-                if(generalData.getInt("UpvoteCount")> votes) {
+            if(generalData.getInt("upvotes")!= votes) {
+                if(generalData.getInt("upvotes")> votes) {
                     // TODO upvote
                 }
                 else {
@@ -91,18 +132,5 @@ public class IssueActivity extends AppCompatActivity {
         Intent intent = new Intent(android.content.Intent.ACTION_VIEW,  Uri.parse(url));
         startActivity(intent);
     }
-    mySwipeRefreshLayout.setOnRefreshListener(
-            new SwipeRefreshLayout.OnRefreshListener() {
-        @Override
-        public void onRefresh() {
-            Log.i(TAG, "onRefresh called from SwipeRefreshLayout");
 
-            // This method performs the actual data-refresh operation.
-            // The method calls setRefreshing(false) when it's finished.
-            getComments(_id);
-            inflateComments();
-        }
-    }
-);
 }
-

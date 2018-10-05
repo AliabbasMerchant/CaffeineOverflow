@@ -14,7 +14,7 @@ public class IssueCard extends ConstraintLayout {
     JSONObject data;
     TextView issue_title, upvote_count, comment_count, location, issue_category, timestamp;
     ImageView issue_image;
-    TextView issue_desc;
+//    TextView issue_desc;
     public IssueCard(Context context) {
         super(context);
         LayoutInflater.from(getContext()).inflate(R.layout.issue_card, this, true);
@@ -36,17 +36,18 @@ public class IssueCard extends ConstraintLayout {
         comment_count = findViewById(R.id.comment_count);
 
         try {
-            issue_title.setText(data.getString("Title"));
-//            issue_desc.setText(data.getString("Desc"));
+            issue_title.setText(data.getString("title"));
+//            issue_desc.setText(data.getString("description"));
             Picasso.get()
-                    .load(data.getString("ImageURL"))
+                    .load(data.getString("image"))
                     .resize(getWidth(), 100)
                     .centerCrop()
                     .into(issue_image);
-            location.setText(data.getString("Location"));
-            comment_count.setText(data.getString("CommentCount"));
-            upvote_count.setText(data.getString("UpvoteCount"));
+            location.setText(data.getString("ward"));
+            comment_count.setText(data.getString("comment_count"));
+            upvote_count.setText(data.getString("upvotes"));
             timestamp.setText(data.getString("timestamp"));
+            issue_category.setText(data.getString("category"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
