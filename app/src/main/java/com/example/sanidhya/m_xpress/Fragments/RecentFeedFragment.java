@@ -4,14 +4,27 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
+import com.example.sanidhya.m_xpress.Adapters.FeedListAdapter;
+import com.example.sanidhya.m_xpress.IssueCard;
+import com.example.sanidhya.m_xpress.MainActivity;
 import com.example.sanidhya.m_xpress.R;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class RecentFeedFragment extends Fragment {
 
+    List<IssueCard> issueCardList;
     public RecentFeedFragment() {
         // Required empty public constructor
     }
@@ -28,7 +41,31 @@ public class RecentFeedFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_recent_feed, container, false);
+        View view = inflater.inflate(R.layout.fragment_recent_feed, container, false);
+        JSONObject jsonObject;
+        JSONArray jsonArray;
+        FeedListAdapter feedListAdapter;
+        ListView listView;
+        issueCardList = new ArrayList<>();
+        IssueCard card;
+
+        String jsonString = "{\"cards\":[{ \"card_id\": 1, \"category\": \"MISC\", \"comment_count\": 2, \"image\": \"image\", \"lat\": 72.8403, \"lng\": 18.9488, \"timestamp\": \"2018-10-05 22:47:11\", \"title\": \"Card1\", \"upvotes\": 0, \"ward\": \"Fort\" }, { \"card_id\": 2, \"category\": \"SERVICES\", \"comment_count\": 0, \"image\": \"image\", \"lat\": 27.8403, \"lng\": 18.9488, \"timestamp\": \"2018-10-05 23:35:20\", \"title\": \"Card2\", \"upvotes\": 0, \"ward\": \"Chira Bazar-Kalbadevi\" }]}";
+        try {
+            jsonObject = new JSONObject(jsonString);
+            jsonArray = jsonObject.getJSONArray("cards");
+            for(int i = 0; i<2; i++){
+                card = new IssueCard(getContext(), (JSONObject) jsonArray.get(i));
+                issueCardList.add(card);
+            }
+            feedListAdapter = new FeedListAdapter(getActivity(), issueCardList);
+            listView = view.findViewById(R.id.feed_recycler_view);
+            listView.setAdapter(feedListAdapter);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return view;
     }
 
 }
