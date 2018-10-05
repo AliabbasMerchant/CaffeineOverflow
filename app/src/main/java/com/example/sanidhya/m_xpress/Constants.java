@@ -10,5 +10,6 @@ public class Constants {
     public static final int RC_SIGN_IN = 123;
 
     public static final String FEED_URL = "";
+    public static final String UPLOAD_URL =  "";
 
 }
