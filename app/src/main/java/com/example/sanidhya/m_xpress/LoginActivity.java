@@ -4,14 +4,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
@@ -21,10 +16,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.FirebaseUserMetadata;
-import com.squareup.picasso.Picasso;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 public class LoginActivity extends AppCompatActivity {
@@ -59,10 +51,12 @@ public class LoginActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 editor = getSharedPreferences(Constants.PREFERENCES, MODE_PRIVATE).edit();
                 editor.putString(Constants.USER_EMAIL_PREF, firebaseAuth.getCurrentUser().getEmail());
+                firebaseAuth.getCurrentUser().getUid();
+
                 editor.putString(Constants.USERNAME_PREF, firebaseAuth.getCurrentUser().getDisplayName());
                 editor.putString(Constants.PIC_URI_PREF, String.valueOf(firebaseAuth.getCurrentUser().getPhotoUrl()));
                 editor.apply();
-                FirebaseUserMetadata metadata = firebaseAuth.getCurrentUser().getMetadata();
+//                FirebaseUserMetadata metadata = firebaseAuth.getCurrentUser().getMetadata();
 //                if (metadata != null) {
 //                    if (metadata.getCreationTimestamp() == metadata.getLastSignInTimestamp()) {
 //                        // The user is new
@@ -70,8 +64,8 @@ public class LoginActivity extends AppCompatActivity {
 //                        // This is an existing user
 //                    }
 //                }
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//                startActivity(intent);
             } else {
                 if (response == null) {
                     Toast.makeText(this, "Sign in cancelled", Toast.LENGTH_SHORT).show();
@@ -83,12 +77,12 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 Toast.makeText(this, "Unknown error", Toast.LENGTH_SHORT).show();
                 Log.e(TAG, "Sign-in error: ", response.getError());
-                Intent intent = new Intent(LoginActivity.this, LoginActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(LoginActivity.this, LoginActivity.class);
+//                startActivity(intent);
             }
         }
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+//        Intent intent = new Intent(this, MainActivity.class);
+//        startActivity(intent);
     }
 
 
@@ -122,8 +116,8 @@ public class LoginActivity extends AppCompatActivity {
                 Log.e(TAG, "onActivityResult: pic url = " + user.getPhotoUrl());
                 Log.e(TAG, "onActivityResult: name = " + user.getDisplayName());
                 Log.e(TAG, "onActivityResult: email = " + user.getEmail());
-                Intent intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(this, MainActivity.class);
+//                startActivity(intent);
             } else {
                 AuthUI.IdpConfig googleIdp = new AuthUI.IdpConfig.GoogleBuilder()
                         .build();
@@ -139,3 +133,4 @@ public class LoginActivity extends AppCompatActivity {
             }
         };
     }
+}
