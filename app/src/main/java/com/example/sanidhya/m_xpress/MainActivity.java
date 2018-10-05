@@ -1,5 +1,6 @@
 package com.example.sanidhya.m_xpress;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -52,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         sideNavigation.getMenu().getItem(0).setChecked(true);
-        switchFragments(0);
+        switchFragments(R.id.menu_posts);
     }
 
     private void switchFragments(int id){
@@ -61,9 +62,13 @@ public class MainActivity extends AppCompatActivity {
         switch(id){
             case R.id.menu_posts: transaction.replace(R.id.fragment_container, new FeedFragment());
                                     break;
+            case R.id.drawer_setting : Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                                    startActivity(intent);
+                                    return;
         }
         Log.d("TestLog","Transaction created");
         transaction.commit();
+        fragmentManager.executePendingTransactions();
     }
 
     @Override
