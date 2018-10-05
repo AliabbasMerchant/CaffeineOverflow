@@ -1,10 +1,15 @@
 package com.example.sanidhya.m_xpress;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -22,11 +27,35 @@ import java.util.Map;
 public class AddIssueActivity extends AppCompatActivity {
 
     Bitmap bitmap;
+    ImageButton cameraButton;
+    ImageView mImageView;
     private static final String TAG = "AddIssueActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_issue);
+
+        cameraButton = findViewById(R.id.camera_button);
+        cameraButton.setOnClickListener(view -> {
+            dispatchTakePictureIntent();
+        });
+    }
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            mImageView = findViewById(R.id.imageView);
+            mImageView.setImageBitmap(imageBitmap);
+        }
     }
 
     public void uploadUserImage(){

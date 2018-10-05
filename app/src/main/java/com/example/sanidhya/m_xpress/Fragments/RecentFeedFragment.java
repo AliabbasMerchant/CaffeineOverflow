@@ -76,8 +76,6 @@ public class RecentFeedFragment extends Fragment {
                 feedListAdapter = new FeedListAdapter(getActivity(), issueCardList);
                 listView = view.findViewById(R.id.feed_recycler_view);
                 listView.setAdapter(feedListAdapter);
-//>>>>>>> 9a8a4dfd3954207de242e88f71215fb75e4e42d6
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }
