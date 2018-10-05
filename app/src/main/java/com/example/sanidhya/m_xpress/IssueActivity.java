@@ -70,8 +70,6 @@ public class IssueActivity extends AppCompatActivity {
         );
     }
     public void inflateGeneralData() {
-
-
         try {
             issue_title.setText(generalData.getString("title"));
             issue_desc.setText(generalData.getString("description"));
@@ -79,7 +77,7 @@ public class IssueActivity extends AppCompatActivity {
                     .load(generalData.getString("image"))
                     .into(issue_image);
             location.setText(generalData.getString("ward"));
-            issue_category
+            issue_category.setText(generalData.getString("category"));
             upvote_count.setText(generalData.getString("upvotes"));
             timestamp.setText(generalData.getString("timestamp"));
         } catch (JSONException e) {

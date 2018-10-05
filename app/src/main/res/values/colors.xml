@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="upvoteColor">#22b93d</color>
-    <color name="upvoteColor">#808080</color>
+    <color name="greyColor">#c2c2c2</color>
+
 
 </resources>
