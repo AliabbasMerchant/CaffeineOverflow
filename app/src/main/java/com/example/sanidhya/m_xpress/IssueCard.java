@@ -12,7 +12,7 @@ import org.json.JSONObject;
 
 public class IssueCard extends ConstraintLayout {
     JSONObject data;
-    TextView issue_title, upvote_count, comment_count, location, issue_category;
+    TextView issue_title, upvote_count, comment_count, location, issue_category, timestamp;
     ImageView issue_image;
     TextView issue_desc;
     public IssueCard(Context context) {
@@ -28,6 +28,7 @@ public class IssueCard extends ConstraintLayout {
     public void inflate_data() {
         issue_title = findViewById(R.id.issue_title);
         issue_image = findViewById(R.id.issue_image);
+        timestamp = findViewById(R.id.timestamp);
         issue_category = findViewById(R.id.issue_category);
 //        issue_desc = findViewById(R.id.issue_desc);
         upvote_count = findViewById(R.id.upvote_count);
@@ -45,11 +46,16 @@ public class IssueCard extends ConstraintLayout {
             location.setText(data.getString("Location"));
             comment_count.setText(data.getString("CommentCount"));
             upvote_count.setText(data.getString("UpvoteCount"));
-
+            timestamp.setText(data.getString("timestamp"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
+/*
 
+String url = "https://www.google.com/maps/search/?api=1&query=lat,long;
+Intent intent = new Intent(android.content.Intent.ACTION_VIEW,  Uri.parse(url));
+startActivity(intent);
+ */
     }
 }
