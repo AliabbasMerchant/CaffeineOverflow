@@ -1,6 +1,9 @@
 package com.example.sanidhya.m_xpress;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -12,7 +15,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.SearchView;
 
 import com.example.sanidhya.m_xpress.Fragments.FeedFragment;
 
@@ -20,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
     private NavigationView sideNavigation;
+    private static final String TAG = "MainActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,4 +89,37 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        skillsSearchView = findViewById(R.id.skillsSearchView);
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        skillsSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        handleIntent(getIntent());
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        setIntent(intent);
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            Log.e(TAG, "handleIntent: action_search: " + query);
+//            doMySearch(query);
+        } else if (Intent.ACTION_VIEW.equals(intent.getAction())) {
+            String skill = intent.getDataString();
+            Log.e(TAG, "handleIntent: skill = " + skill);
+            Uri data = intent.getData();
+            Log.e(TAG, "handleIntent: data = " + data);
+            addSkill(skill);
+        }
+    }
+
+
 }
