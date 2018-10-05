@@ -51,11 +51,5 @@ public class IssueCard extends ConstraintLayout {
             e.printStackTrace();
         }
 
-/*
-
-String url = "https://www.google.com/maps/search/?api=1&query=lat,long;
-Intent intent = new Intent(android.content.Intent.ACTION_VIEW,  Uri.parse(url));
-startActivity(intent);
- */
-    }
+        }
 }

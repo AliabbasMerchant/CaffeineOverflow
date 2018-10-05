@@ -98,11 +98,6 @@ public class LoginActivity extends AppCompatActivity {
         firebaseAuth.removeAuthStateListener(authStateListener);
     }
 
-    @Override
-    public void onBackPressed() {
-        Toast.makeText(this, "Please Log In Via Google!", Toast.LENGTH_SHORT).show();
-    }
-
     public void authenticate(View v) {
         firebaseAuth = FirebaseAuth.getInstance();
         authStateListener = firebaseAuth -> {
