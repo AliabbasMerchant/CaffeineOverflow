@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">M-Xpress</string>
+    <string name="drawer_account">Manage Account</string>
+    <string name="drawer_settings">Settings</string>
+    <string name="drawer_posts">My Feed</string>
+    <string name="drawer_upvotes">My Upvotes</string>
 </resources>

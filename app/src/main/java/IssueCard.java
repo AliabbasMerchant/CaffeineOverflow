@@ -5,6 +5,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.sanidhya.m_xpress.R;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,10 +32,18 @@ public class IssueCard extends ConstraintLayout {
         location = findViewById(R.id.location);
         comment_count = findViewById(R.id.comment_count);
 
-
         try {
             issue_title.setText(data.getString("Title"));
+            issue_desc.setText(data.getString("Desc"));
             // TODO wanna add desc or not??
+            Picasso.get()
+                    .load(data.getString("ImageURL"))
+                    .resize(50, 50)
+                    .centerCrop()
+                    .into(issue_image);
+            location.setText(data.getString("Location"));
+
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
