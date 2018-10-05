@@ -1,4 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group>
+        <item
+            android:id="@+id/menu_posts"
+            android:title="@string/drawer_posts"
+            android:icon="@drawable/ic_home_black_24dp"/>
+        <item
+            android:id="@+id/menu_upvotes"
+            android:title="@string/drawer_upvotes"/>
+    </group>
+    <group
+        android:id="@+id/menu_bottom">
+        <item
+            android:id="@+id/drawer_account"
+            android:title="@string/drawer_account"
+            android:icon="@drawable/ic_person_black_24dp"/>
 
+        <item
+            android:id="@+id/drawer_setting"
+            android:title="@string/drawer_settings"
+            android:icon="@drawable/ic_settings_black_24dp"/>
+    </group>
 </menu>
