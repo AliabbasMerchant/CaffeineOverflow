@@ -4,7 +4,9 @@ package com.example.sanidhya.m_xpress.Fragments;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,11 +46,13 @@ public class FeedFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_feed, container, false);
         tabs = v.findViewById(R.id.tabs);
-        adapter = new FeedPagerAdapter(getActivity().getSupportFragmentManager());
+        FragmentManager fm = getActivity().getSupportFragmentManager();
+        adapter = new FeedPagerAdapter(fm);
 
         viewPager = v.findViewById(R.id.view_pager);
         viewPager.setAdapter(adapter);
 
+        Log.d("FeedFragment", "View_pager loading");
         tabs.setupWithViewPager(viewPager);
         return v;
     }

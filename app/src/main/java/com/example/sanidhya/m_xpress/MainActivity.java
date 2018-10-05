@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.sanidhya.m_xpress.Fragments.FeedFragment;
@@ -50,14 +51,19 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+        sideNavigation.getMenu().getItem(0).setChecked(true);
+        switchFragments(0);
     }
 
     private void switchFragments(int id){
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         switch(id){
-            case R.id.drawer_layout: transaction.replace(R.id.fragment_container, new FeedFragment());
+            case R.id.menu_posts: transaction.replace(R.id.fragment_container, new FeedFragment());
+                                    break;
         }
+        Log.d("TestLog","Transaction created");
+        transaction.commit();
     }
 
     @Override
