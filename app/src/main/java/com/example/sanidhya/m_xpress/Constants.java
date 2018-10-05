@@ -8,4 +8,7 @@ public class Constants {
     public static final String USERNAME_PREF = "UserNamePreference";
     public static final String PIC_URI_PREF = "PicURIPreference";
     public static final int RC_SIGN_IN = 123;
+
+    public static final String FEED_URL = "";
+
 }

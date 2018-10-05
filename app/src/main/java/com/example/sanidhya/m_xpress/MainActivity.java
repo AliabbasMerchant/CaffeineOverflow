@@ -31,6 +31,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        handleIntent(getIntent());
+
+
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -91,16 +95,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        skillsSearchView = findViewById(R.id.skillsSearchView);
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        skillsSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        handleIntent(getIntent());
-    }
-
     @Override
     protected void onNewIntent(Intent intent) {
         setIntent(intent);
@@ -117,7 +111,8 @@ public class MainActivity extends AppCompatActivity {
             Log.e(TAG, "handleIntent: skill = " + skill);
             Uri data = intent.getData();
             Log.e(TAG, "handleIntent: data = " + data);
-            addSkill(skill);
+            // addSkill(skill);
+            // TODO
         }
     }
 
