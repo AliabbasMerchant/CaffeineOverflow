@@ -8,7 +8,7 @@
         <item
             android:id="@+id/menu_upvotes"
             android:title="@string/drawer_upvotes"
-            android:icon="@drawable/ic_arrow_up"/>
+            android:icon="@drawable/ic_plus_one"/>
     </group>
     <group
         android:id="@+id/menu_bottom">
