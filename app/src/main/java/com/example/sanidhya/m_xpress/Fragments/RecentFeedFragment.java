@@ -52,6 +52,7 @@ public class RecentFeedFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_recent_feed, container, false);
 
+
         RequestQueue queue = Volley.newRequestQueue(getContext());
         String URL = Constants.FEED_URL; // TODO
         StringRequest sr = new StringRequest(Request.Method.GET, URL, response -> {
@@ -75,7 +76,6 @@ public class RecentFeedFragment extends Fragment {
                 feedListAdapter = new FeedListAdapter(getActivity(), issueCardList);
                 listView = view.findViewById(R.id.feed_recycler_view);
                 listView.setAdapter(feedListAdapter);
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }
