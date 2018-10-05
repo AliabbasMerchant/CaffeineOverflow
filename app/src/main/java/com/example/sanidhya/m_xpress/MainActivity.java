@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -18,6 +20,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.SearchView;
 
 import com.example.sanidhya.m_xpress.Fragments.FeedFragment;
@@ -62,6 +65,20 @@ public class MainActivity extends AppCompatActivity {
         });
         sideNavigation.getMenu().getItem(0).setChecked(true);
         switchFragments(R.id.menu_posts);
+
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, AddIssueActivity.class);
+                startActivity(intent);
+            }
+        });
+
+//        skillsSearchView = findViewById(R.id.skillsSearchView);
+//        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+//        skillsSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+//        handleIntent(getIntent());
     }
 
     private void switchFragments(int id){
@@ -92,14 +109,11 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        skillsSearchView = findViewById(R.id.skillsSearchView);
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        skillsSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        handleIntent(getIntent());
-    }
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//
+//    }
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -117,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
             Log.e(TAG, "handleIntent: skill = " + skill);
             Uri data = intent.getData();
             Log.e(TAG, "handleIntent: data = " + data);
-            addSkill(skill);
+//            addSkill(skill);
         }
     }
 

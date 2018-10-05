@@ -53,7 +53,8 @@ public class RecentFeedFragment extends Fragment {
         try {
             jsonObject = new JSONObject(jsonString);
             jsonArray = jsonObject.getJSONArray("cards");
-            for(int i = 0; i<2; i++){
+
+            for(int i = 0; i<jsonArray.length(); i++){
                 card = new IssueCard(getContext(), (JSONObject) jsonArray.get(i));
                 issueCardList.add(card);
             }
