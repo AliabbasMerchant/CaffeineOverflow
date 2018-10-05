@@ -12,6 +12,8 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.example.sanidhya.m_xpress.Fragments.FeedFragment;
+
 public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
@@ -54,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         switch(id){
-//            case R.id.drawer_layout: return new PostsFragment();
+            case R.id.drawer_layout: transaction.replace(R.id.fragment_container, new FeedFragment());
         }
     }
 
