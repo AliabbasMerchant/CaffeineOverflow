@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "365289037716",
+    "firebase_url": "https://m-xpress-fc5dc.firebaseio.com",
+    "project_id": "m-xpress-fc5dc",
+    "storage_bucket": "m-xpress-fc5dc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:365289037716:android:fdd58bdd3974a041",
+        "android_client_info": {
+          "package_name": "com.example.sanidhya.m_xpress"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "365289037716-p8eifqdt4vl3625474a214328l0nfmub.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZB0QWNZPVUPaSZgrhk_-67teLBydaJl4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
