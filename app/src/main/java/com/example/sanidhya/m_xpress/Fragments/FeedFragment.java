@@ -3,6 +3,8 @@ package com.example.sanidhya.m_xpress.Fragments;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -24,6 +26,7 @@ import com.example.sanidhya.m_xpress.R;
 
 public class FeedFragment extends Fragment {
 
+    private static final String TAG = "FeedFragment";
     protected FeedPagerAdapter adapter;
     private TabLayout tabs;
     private ViewPager viewPager;
@@ -43,16 +46,22 @@ public class FeedFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+        SearchView searchView = new SearchView(((MainActivity) getContext()).getSupportActionBar().getThemedContext());
+        SearchManager searchManager = (SearchManager) getContext().getSystemService(Context.SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
 //        if (getArguments() != null) {
 //            mParam1 = getArguments().getString(ARG_PARAM1);
 //            mParam2 = getArguments().getString(ARG_PARAM2);
 //        }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         View v = inflater.inflate(R.layout.fragment_feed, container, false);
         tabs = v.findViewById(R.id.tabs);
         FragmentManager fm = getActivity().getSupportFragmentManager();
@@ -65,43 +74,25 @@ public class FeedFragment extends Fragment {
         tabs.setupWithViewPager(viewPager);
         return v;
     }
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-
-        super.onCreateOptionsMenu(menu, menuInflater);
-        menu.clear();
-        menuInflater.inflate(R.menu.options_menu, menu);
-        MenuItem item = menu.findItem(R.id.menu_search);
-        SearchView searchView = new SearchView(((MainActivity) getContext()).getSupportActionBar().getThemedContext());
-        MenuItemCompat.setShowAsAction(item, MenuItemCompat.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItemCompat.SHOW_AS_ACTION_IF_ROOM);
-        MenuItemCompat.setActionView(item, searchView);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
-        searchView.setOnClickListener(new View.OnClickListener() {
-                                          @Override
-                                          public void onClick(View v) {
-
-                                          }
-                                      }
-        );
-
-
-
-        menuInflater.inflate(R.menu.options_menu, menu);
-        super.onCreateOptionsMenu(menu, menuInflater);
-
-        // Get the SearchView and set the searchable configuration
-//        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-//        SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
-//        // Assumes current activity is the searchable activity
-//        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case R.id.menu_search:
+//                Log.e(TAG, "onOptionsItemSelected: ");
+//                return true;
+//            default:
+//                return super.onOptionsItemSelected(item);
+//        }
+//    }
+//
+//    @Override
+//    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+//        super.onCreateOptionsMenu(menu, menuInflater);
+//        menu.clear();
+//        menuInflater.inflate(R.menu.options_menu, menu);
+//        MenuItem item = menu.findItem(R.id.menu_search);
+//        SearchView searchView = new SearchView(((MainActivity) getContext()).getSupportActionBar().getThemedContext());
+//        MenuItemCompat.setShowAsAction(item, MenuItemCompat.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItemCompat.SHOW_AS_ACTION_IF_ROOM);
+//        MenuItemCompat.setActionView(item, searchView);
+//    }
 }
