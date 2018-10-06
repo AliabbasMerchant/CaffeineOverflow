@@ -7,10 +7,13 @@ import android.net.Uri;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +22,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.sanidhya.m_xpress.Adapters.FeedListAdapter;
+import com.example.sanidhya.m_xpress.Adapters.CommentAdapter;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -97,7 +101,9 @@ public class IssueActivity extends AppCompatActivity {
         }
     }
     public void inflateComments() {
-//        todo
+        RecyclerView recyclerView = findViewById(R.id.comments_recycler_view);
+        CommentAdapter adapter = new CommentAdapter(getComments(_id));
+        recyclerView.setAdapter(adapter);
     }
     public void onVotePressed(View view) {
         votes = Integer.parseInt(upvote_count.getText().toString());
@@ -124,9 +130,9 @@ public class IssueActivity extends AppCompatActivity {
 //        queue.add(sr);
         userHasVoted = false;
     }
-    public void getComments(int _id) {
+    public ArrayList<Comment> getComments(int _id) {
         RequestQueue queue = Volley.newRequestQueue(this);
-        String URL = Constants.COMMENTS_URL+"?card_id="+_id;
+        String URL = Constants.COMMENTS_URL + "?card_id=" + _id;
         StringRequest sr = new StringRequest(Request.Method.GET, URL, response -> {
             Log.e(TAG, "onResponse: " + response);
             JSONObject jsonObject;
@@ -138,7 +144,9 @@ public class IssueActivity extends AppCompatActivity {
             }
         }, error -> Toast.makeText(this, "That didn't work!", Toast.LENGTH_SHORT).show());
         queue.add(sr);
+        return new ArrayList<>();
     }
+
     @Override
     public void onBackPressed() {
         try {

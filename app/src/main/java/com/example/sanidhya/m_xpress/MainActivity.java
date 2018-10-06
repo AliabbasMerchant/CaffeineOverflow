@@ -17,9 +17,10 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-
 import com.example.sanidhya.m_xpress.Fragments.MapFeedFragment;
 import com.example.sanidhya.m_xpress.Fragments.RecentFeedFragment;
+import com.example.sanidhya.m_xpress.Fragments.FeedFragment;
+import com.example.sanidhya.m_xpress.Fragments.NearbyIssuesFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -91,8 +92,12 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.drawer_setting : Intent intent1 = new Intent(MainActivity.this, LoginActivity.class);
                                     startActivity(intent1);
+            case R.id.drawer_account : Intent intent2= new Intent(MainActivity.this, LoginActivity.class);
+                                    startActivity(intent2);
+
                                     return;
         }
+//        transaction.replace(R.id.fragment_container, new NearbyIssuesFragment());
         Log.d("TestLog","Transaction created");
         transaction.commit();
         fragmentManager.executePendingTransactions();
