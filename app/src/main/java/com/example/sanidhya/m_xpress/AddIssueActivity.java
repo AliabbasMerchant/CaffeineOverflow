@@ -3,11 +3,13 @@ package com.example.sanidhya.m_xpress;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.provider.MediaStore;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -28,12 +30,22 @@ public class AddIssueActivity extends AppCompatActivity {
 
     Bitmap bitmap;
     ImageButton cameraButton;
+    Button postButton;
     ImageView mImageView;
     private static final String TAG = "AddIssueActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_issue);
+
+        postButton = findViewById(R.id.button);
+        postButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(AddIssueActivity.this, "Successfully Posted!", Toast.LENGTH_SHORT).show();
+                onBackPressed();
+            }
+        });
 
         cameraButton = findViewById(R.id.camera_button);
         cameraButton.setOnClickListener(view -> {

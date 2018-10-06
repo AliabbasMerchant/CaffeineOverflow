@@ -77,5 +77,6 @@ public class IssueCard extends CardView implements View.OnClickListener {
         Intent i = new Intent(view.getContext(), IssueActivity.class);
         i.putExtra("data", data.toString());
         view.getContext().startActivity(i);
+
     }
 }
