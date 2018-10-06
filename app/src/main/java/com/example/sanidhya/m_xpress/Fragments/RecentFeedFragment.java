@@ -79,7 +79,7 @@ public class RecentFeedFragment extends Fragment {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }, error -> Toast.makeText(getContext(), "That didn't work!", Toast.LENGTH_SHORT).show());
+        }, error -> Log.e(TAG, "onResponse: " + "Did not work"));
         queue.add(sr);
 
         return view;

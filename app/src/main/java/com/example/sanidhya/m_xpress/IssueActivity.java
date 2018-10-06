@@ -144,7 +144,7 @@ public class IssueActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }, error -> Toast.makeText(this, "That didn't work!", Toast.LENGTH_SHORT).show());
+        }, error -> Log.e(TAG, "onResponse: " + "That did not work"));
         queue.add(sr);
         return new ArrayList<>();
     }
@@ -187,7 +187,7 @@ public class IssueActivity extends AppCompatActivity {
             String URL = Constants.COMMENT_URL + "?card_id=" + _id + "&user_id=" + _id + "&text=" + text;
             StringRequest sr = new StringRequest(Request.Method.GET, URL, response -> {
                 Log.e(TAG, "onResponse: " + response);
-            }, error -> Toast.makeText(this, "That didn't work!", Toast.LENGTH_SHORT).show());
+            }, error -> Log.e(TAG, "onResponse: " + "Didn't work"));
             queue.add(sr);
         }
         else {

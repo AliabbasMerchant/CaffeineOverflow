@@ -63,8 +63,8 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-        sideNavigation.getMenu().getItem(0).setChecked(true);
-        switchFragments(R.id.menu_posts);
+        sideNavigation.getMenu().getItem(1).setChecked(true);
+        switchFragments(R.id.drawer_map_feed);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

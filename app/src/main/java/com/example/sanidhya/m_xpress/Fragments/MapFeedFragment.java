@@ -108,7 +108,7 @@ public class MapFeedFragment extends Fragment implements OnMapReadyCallback {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }, error -> Toast.makeText(getContext(), "That didn't work!", Toast.LENGTH_SHORT).show());
+        }, error -> Log.e(TAG, "onResponse: " + "Nope"));
         queue.add(sr);
     }
 

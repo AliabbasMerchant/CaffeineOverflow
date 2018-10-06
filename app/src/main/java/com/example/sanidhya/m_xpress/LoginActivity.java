@@ -159,8 +159,8 @@ public class LoginActivity extends AppCompatActivity {
             RequestQueue queue = Volley.newRequestQueue(this);
             String URL = Constants.LOGIN_URL+"?user_id="+user_token;
             StringRequest sr = new StringRequest(Request.Method.GET, URL, response -> {
-                Log.e(TAG, "onResponse: " + response);
-            }, error -> Toast.makeText(this, "That didn't work!", Toast.LENGTH_SHORT).show());
+              //  Log.e(TAG, "onResponse: " + response);
+            }, error -> Log.e(TAG, "onResponse: " + "That did not work"));
             queue.add(sr);
 
         }

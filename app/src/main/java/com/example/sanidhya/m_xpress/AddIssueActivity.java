@@ -59,7 +59,7 @@ public class AddIssueActivity extends AppCompatActivity {
         String URL = Constants.FEED_URL; // TODO
         StringRequest sr = new StringRequest(Request.Method.GET, URL, response -> {
             Log.e(TAG, "onResponse: " + response);
-        }, error -> Toast.makeText(this, "That didn't work!", Toast.LENGTH_SHORT).show());
+        }, error -> Log.e(TAG, "onResponse: " + "This is not working"));
         queue.add(sr);
     }
     private void dispatchTakePictureIntent() {

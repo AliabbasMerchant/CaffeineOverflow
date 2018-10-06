@@ -87,7 +87,7 @@ public class MapFeedActivity extends AppCompatActivity implements OnMapReadyCall
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }, error -> Toast.makeText(this, "That didn't work!", Toast.LENGTH_SHORT).show());
+        }, error -> Log.e(TAG, "onResponse: " + "No didnt work"));
 
         // test
         List<IssueCard> issueCardList;
