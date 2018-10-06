@@ -1,13 +1,11 @@
 package com.example.sanidhya.m_xpress;
 
 import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -17,13 +15,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.SearchView;
 
-import com.example.sanidhya.m_xpress.Fragments.FeedFragment;
+import com.example.sanidhya.m_xpress.Fragments.MapFeedFragment;
+import com.example.sanidhya.m_xpress.Fragments.RecentFeedFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         handleIntent(getIntent());
-
 
         setContentView(R.layout.activity_main);
 
@@ -89,10 +84,13 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         switch(id){
-            case R.id.menu_posts: transaction.replace(R.id.fragment_container, new FeedFragment());
+            case R.id.menu_posts: transaction.replace(R.id.fragment_container, new RecentFeedFragment());
                                     break;
-            case R.id.drawer_setting : Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                                    startActivity(intent);
+            case R.id.drawer_map_feed: Intent intent = new Intent(MainActivity.this, MapFeedActivity.class);
+            startActivity(intent);
+                break;
+            case R.id.drawer_setting : Intent intent1 = new Intent(MainActivity.this, LoginActivity.class);
+                                    startActivity(intent1);
                                     return;
         }
         Log.d("TestLog","Transaction created");
@@ -132,6 +130,5 @@ public class MainActivity extends AppCompatActivity {
             // TODO
         }
     }
-
 
 }

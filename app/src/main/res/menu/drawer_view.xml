@@ -10,6 +10,11 @@
             android:id="@+id/menu_upvotes"
             android:title="@string/drawer_upvotes"
             android:icon="@drawable/ic_plus_one"/>
+        <item
+            android:id="@+id/drawer_map_feed"
+            android:title="@string/drawer_map_feed"
+            android:icon="@drawable/ic_location_24"/>
+
     </group>
     <group
         android:id="@+id/menu_bottom"

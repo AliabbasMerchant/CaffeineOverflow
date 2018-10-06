@@ -66,7 +66,7 @@ public class FeedListAdapter extends BaseAdapter {
         location = view.findViewById(R.id.location);
         comment_count = view.findViewById(R.id.comment_count);
 
-        //TO-DO INITIALISE data WITH JSONObject
+        //TODO INITIALISE data WITH JSONObject
 
         try {
             issue_title.setText(data.getString("title"));

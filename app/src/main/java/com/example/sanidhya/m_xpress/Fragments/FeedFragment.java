@@ -26,15 +26,15 @@ import com.example.sanidhya.m_xpress.R;
 
 public class FeedFragment extends Fragment {
 
-    private static final String TAG = "FeedFragment";
+    private static final String TAG = "MapFeedFragment";
     protected FeedPagerAdapter adapter;
     private TabLayout tabs;
     private ViewPager viewPager;
     public FeedFragment() {
         // Required empty public constructor
     }
-//    public static FeedFragment newInstance(String param1, String param2) {
-//        FeedFragment fragment = new FeedFragment();
+//    public static MapFeedFragment newInstance(String param1, String param2) {
+//        MapFeedFragment fragment = new MapFeedFragment();
 //        Bundle args = new Bundle();
 //        args.putString(ARG_PARAM1, param1);
 //        args.putString(ARG_PARAM2, param2);
@@ -70,7 +70,7 @@ public class FeedFragment extends Fragment {
         viewPager = v.findViewById(R.id.view_pager);
         viewPager.setAdapter(adapter);
 
-        Log.d("FeedFragment", "View_pager loading");
+        Log.d("MapFeedFragment", "View_pager loading");
         tabs.setupWithViewPager(viewPager);
         return v;
     }
