@@ -48,14 +48,15 @@ public class IssueActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_issue);
 
-        Intent intent = getIntent();
-        if(intent.getData() != null) {
+//        Intent intent = getIntent();
+//        if(intent.getData() != null) {
             try {
-                generalData = new JSONObject(intent.getStringExtra("data"));
+//                generalData = new JSONObject(intent.getStringExtra("data"));
+                generalData = new JSONObject("{ \"card_id\": 1, \"category\": \"MISC\", \"comment_count\": 2, \"image\": \"image\", \"lat\": 72.8403, \"lng\": 18.9488, \"timestamp\": \"2018-10-05 22:47:11\", \"title\": \"Card1\", \"upvotes\": 0, \"ward\": \"Fort\" }");
                 _id = generalData.getInt("card_id");
             } catch (JSONException e) {
                 e.printStackTrace();
-            }
+//            }
         }
         getComments(_id);
 
@@ -74,6 +75,7 @@ public class IssueActivity extends AppCompatActivity {
             upvote_count.setTextColor(getResources().getColor(R.color.upvoteColor));
         }
 
+        mySwipeRefreshLayout = findViewById(R.id.swiperefresh);
 
         mySwipeRefreshLayout.setOnRefreshListener( () -> {
                     Log.i(TAG, "onRefresh called from SwipeRefreshLayout");

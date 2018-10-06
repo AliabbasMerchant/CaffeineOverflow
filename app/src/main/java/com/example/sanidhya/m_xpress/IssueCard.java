@@ -1,9 +1,12 @@
 package com.example.sanidhya.m_xpress;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.CardView;
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,7 +15,7 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class IssueCard extends CardView {
+public class IssueCard extends CardView implements View.OnClickListener {
     public JSONObject getData() {
         return data;
     }
@@ -24,7 +27,12 @@ public class IssueCard extends CardView {
     //    TextView issue_desc;
     public IssueCard(Context context) {
         super(context);
+        setOnClickListener(this);
         LayoutInflater.from(getContext()).inflate(R.layout.issue_card, this, true);
+    }
+    public  IssueCard(Context context, AttributeSet attributeSet){
+        super(context, attributeSet);
+        setOnClickListener(this);
     }
 
     public IssueCard(Context context, JSONObject data) {
@@ -60,6 +68,15 @@ public class IssueCard extends CardView {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+    }
+
+
+    @Override
+    public void onClick(View view) {
+        Intent i = new Intent(view.getContext(), IssueActivity.class);
+        i.putExtra("data", data.toString());
+        view.getContext().startActivity(i);
 
     }
 }

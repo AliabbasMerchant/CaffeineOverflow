@@ -87,15 +87,15 @@ public class MainActivity extends AppCompatActivity {
         switch(id){
             case R.id.menu_posts: transaction.replace(R.id.fragment_container, new RecentFeedFragment());
                                     break;
-            case R.id.drawer_map_feed: Intent intent = new Intent(MainActivity.this, MapFeedActivity.class);
-            startActivity(intent);
+            case R.id.drawer_account : Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                                    startActivity(intent);
+                                    break;
+            case R.id.drawer_setting : Intent i = new Intent(MainActivity.this, IssueActivity.class);
+                                    startActivity(i);
+                                    break;
+            case R.id.drawer_map_feed: Intent i2 = new Intent(MainActivity.this, MapFeedActivity.class);
+            startActivity(i2);
                 break;
-            case R.id.drawer_setting : Intent intent1 = new Intent(MainActivity.this, LoginActivity.class);
-                                    startActivity(intent1);
-            case R.id.drawer_account : Intent intent2= new Intent(MainActivity.this, LoginActivity.class);
-                                    startActivity(intent2);
-
-                                    return;
         }
 //        transaction.replace(R.id.fragment_container, new NearbyIssuesFragment());
         Log.d("TestLog","Transaction created");
