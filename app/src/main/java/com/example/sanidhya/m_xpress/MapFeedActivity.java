@@ -1,10 +1,18 @@
 package com.example.sanidhya.m_xpress;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -25,12 +33,16 @@ import com.example.sanidhya.m_xpress.Constants;
 import com.example.sanidhya.m_xpress.IssueCard;
 import com.example.sanidhya.m_xpress.MainActivity;
 import com.example.sanidhya.m_xpress.R;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONArray;
@@ -39,13 +51,25 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-public class MapFeedActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MapFeedActivity extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
+    LatLngBounds.Builder builder;
+
     JSONArray feedData;
+    {
+        try {
+            feedData = new JSONObject("{\"cards\":[{ \"card_id\": 1, \"category\": \"MISC\", \"comment_count\": 2, \"image\": \"image\", \"lat\": 19.098361, \"lng\": 72.840984, \"timestamp\": \"2018-10-05 22:47:11\", \"title\": \"Card1\", \"upvotes\": 0, \"ward\": \"Fort\" }, { \"card_id\": 2, \"category\": \"SERVICES\", \"comment_count\": 0, \"image\": \"image\", \"lat\": 19.078246, \"lng\": 72.898425, \"timestamp\": \"2018-10-05 23:35:20\", \"title\": \"Card2\", \"upvotes\": 0, \"ward\": \"Chira Bazar-Kalbadevi\" }]}").getJSONArray("cards");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     private GoogleMap mMap;
     double lat=19.0213, lng=72.8424;
     private SupportMapFragment mapFragment;
     ListView listView;
+    LocationManager locationManager;
     private static final String TAG = "MapFeedFragment";
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,10 +79,41 @@ public class MapFeedActivity extends AppCompatActivity implements OnMapReadyCall
         mapFragment.getMapAsync(this);
         listView = findViewById(R.id.feed_recycler_view);
         getCurrentLocationAndData();
+
     }
     void getCurrentLocationAndData() {
-        // TODO Set current lat lng
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
+        }
+//        getLocation();
         getData(lat, lng);
+    }
+    void getLocation() {
+        try {
+            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 5, this);
+        }
+        catch(SecurityException e) {
+            e.printStackTrace();
+        }
+    }
+    @Override
+    public void onLocationChanged(Location location) {
+        lat = location.getLatitude();
+        lng = location.getLongitude();
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+        Toast.makeText(MapFeedActivity.this, "Please Enable GPS and Internet", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
     }
 
     void getData(double lat, double lng) {
@@ -72,12 +127,11 @@ public class MapFeedActivity extends AppCompatActivity implements OnMapReadyCall
             FeedListAdapter feedListAdapter;
             issueCardList = new ArrayList<>();
             IssueCard card;
-            //test only
-            response = "{\"cards\":[{ \"card_id\": 1, \"category\": \"MISC\", \"comment_count\": 2, \"image\": \"image\", \"lat\": 72.8403, \"lng\": 18.9488, \"timestamp\": \"2018-10-05 22:47:11\", \"title\": \"Card1\", \"upvotes\": 0, \"ward\": \"Fort\" }, { \"card_id\": 2, \"category\": \"SERVICES\", \"comment_count\": 0, \"image\": \"image\", \"lat\": 27.8403, \"lng\": 18.9488, \"timestamp\": \"2018-10-05 23:35:20\", \"title\": \"Card2\", \"upvotes\": 0, \"ward\": \"Chira Bazar-Kalbadevi\" }]}";
             try {
                 jsonObject = new JSONObject(response);
                 jsonArray = jsonObject.getJSONArray("cards");
-                feedData = jsonArray;
+                if(jsonArray!=null)
+                    feedData = jsonArray;
                 for(int i = 0; i<jsonArray.length(); i++){
                     card = new IssueCard(this, (JSONObject) jsonArray.get(i));
                     issueCardList.add(card);
@@ -87,7 +141,8 @@ public class MapFeedActivity extends AppCompatActivity implements OnMapReadyCall
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }, error -> Toast.makeText(this, "That didn't work!", Toast.LENGTH_SHORT).show());
+        }, error -> {});
+//        Toast.makeText(this, "That didn't work!", Toast.LENGTH_SHORT).show());
 
         // test
         List<IssueCard> issueCardList;
@@ -96,14 +151,14 @@ public class MapFeedActivity extends AppCompatActivity implements OnMapReadyCall
         FeedListAdapter feedListAdapter;
         issueCardList = new ArrayList<>();
         IssueCard card;
-        String response = "{\"cards\":[{ \"card_id\": 1, \"category\": \"MISC\", \"comment_count\": 2, \"image\": \"image\", \"lat\": 72.8403, \"lng\": 18.9488, \"timestamp\": \"2018-10-05 22:47:11\", \"title\": \"Card1\", \"upvotes\": 0, \"ward\": \"Fort\" }, { \"card_id\": 2, \"category\": \"SERVICES\", \"comment_count\": 0, \"image\": \"image\", \"lat\": 27.8403, \"lng\": 18.9488, \"timestamp\": \"2018-10-05 23:35:20\", \"title\": \"Card2\", \"upvotes\": 0, \"ward\": \"Chira Bazar-Kalbadevi\" }]}";
+        String response = "{\"cards\":[{ \"card_id\": 1, \"category\": \"ROAD\", \"comment_count\": 25, \"image\": \"https://s4.scoopwhoop.com/anj/images/8e9dac43-9312-40c2-91f1-a2a8a16130b7.jpg\", \"lat\": 19.098361, \"lng\": 72.840984, \"timestamp\": \"2018-10-05 22:47:11\", \"title\": \"Potholes near Fort\", \"upvotes\": 42, \"ward\": \"Fort\" }, { \"card_id\": 2, \"category\": \"SERVICES\", \"comment_count\": 88, \"image\": \"https://www.india.com/wp-content/uploads/2017/10/mumbai-local.jpg\", \"lat\": 19.078246, \"lng\": 72.898425, \"timestamp\": \"2018-10-05 23:35:20\", \"title\": \"Train Service Disruption\", \"upvotes\": 89, \"ward\": \"Chira Bazar-Kalbadevi\" }]}";
         try {
             jsonObject = new JSONObject(response);
             jsonArray = jsonObject.getJSONArray("cards");
             Log.e(TAG, "getData: "+jsonObject );
             Log.e(TAG, "getData: "+jsonArray );
-
-            feedData = jsonArray;
+            if(jsonArray!=null)
+                feedData = jsonArray;
             for(int i = 0; i<jsonArray.length(); i++){
                 card = new IssueCard(this, (JSONObject) jsonArray.get(i));
                 issueCardList.add(card);
@@ -113,24 +168,25 @@ public class MapFeedActivity extends AppCompatActivity implements OnMapReadyCall
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-
-
         queue.add(sr);
     }
-
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        if(feedData == null) {
+            {
+                try {
+                    JSONObject jsonObject = new JSONObject("{\"cards\":[{ \"card_id\": 1, \"category\": \"MISC\", \"comment_count\": 2, \"image\": \"image\", \"lat\": 19.098361, \"lng\": 72.840984, \"timestamp\": \"2018-10-05 22:47:11\", \"title\": \"Card1\", \"upvotes\": 0, \"ward\": \"Fort\" }, { \"card_id\": 2, \"category\": \"SERVICES\", \"comment_count\": 0, \"image\": \"image\", \"lat\": 19.078246, \"lng\": 72.898425, \"timestamp\": \"2018-10-05 23:35:20\", \"title\": \"Card2\", \"upvotes\": 0, \"ward\": \"Chira Bazar-Kalbadevi\" }]}");;
+                    feedData = jsonObject.getJSONArray("cards");
+                } catch (JSONException e) {
+                    Log.e(TAG, "onMapReady");
+                    e.printStackTrace();
+                }
+            }
+
+        }
+
+        builder = new LatLngBounds.Builder();
         for(int i = 0; i<feedData.length(); i++){
             try {
                 markALocation((JSONObject) feedData.get(i));
@@ -138,7 +194,29 @@ public class MapFeedActivity extends AppCompatActivity implements OnMapReadyCall
                 e.printStackTrace();
             }
         }
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(mumbai));
+
+        LatLngBounds bounds = builder.build();
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 25);
+        mMap.moveCamera(cu);
+
+
+        mMap.setOnMapClickListener(latLng -> {
+            lat = latLng.latitude;
+            lng = latLng.longitude;
+            getData(lat, lng);
+            builder = new LatLngBounds.Builder();
+                for(int i = 0; i<feedData.length(); i++){
+                try {
+                    markALocation((JSONObject) feedData.get(i));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            LatLngBounds bound = builder.build();
+            CameraUpdate c = CameraUpdateFactory.newLatLngBounds(bound, 25);
+            mMap.moveCamera(c);
+
+        });
     }
     public void markALocation(JSONObject data) {
         try {
@@ -155,6 +233,9 @@ public class MapFeedActivity extends AppCompatActivity implements OnMapReadyCall
                 default: icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW); break;
             }
             mMap.addMarker(new MarkerOptions().position(location).title(title).icon(icon));
+            builder.include(location);
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(location));
+            CameraUpdateFactory.zoomBy(100);
         } catch (JSONException e) {
             e.printStackTrace();
         }
