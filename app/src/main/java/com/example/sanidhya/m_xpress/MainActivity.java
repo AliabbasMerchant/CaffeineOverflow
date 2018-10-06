@@ -89,14 +89,15 @@ public class MainActivity extends AppCompatActivity {
     private void switchFragments(int id){
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-//        switch(id){
-//            case R.id.menu_posts: transaction.replace(R.id.fragment_container, new FeedFragment());
-//                                    break;
-//            case R.id.drawer_setting : Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-//                                    startActivity(intent);
-//                                    return;
-//        }
-        transaction.replace(R.id.fragment_container, new NearbyIssuesFragment());
+        switch(id){
+            case R.id.menu_posts: transaction.replace(R.id.fragment_container, new FeedFragment());
+                                    break;
+            case R.id.drawer_account : Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                                    startActivity(intent);
+
+                                    return;
+        }
+//        transaction.replace(R.id.fragment_container, new NearbyIssuesFragment());
         Log.d("TestLog","Transaction created");
         transaction.commit();
         fragmentManager.executePendingTransactions();
