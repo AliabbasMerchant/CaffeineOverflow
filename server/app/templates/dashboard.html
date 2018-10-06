@@ -1,0 +1,144 @@
+
+{% extends "base.html" %}
+{% block content %}
+<!-- OVERVIEW -->
+<style>
+		/* Set the size of the div element that contains the map */
+	   #map {
+		 height: 300px;  /* The height is 400 pixels */
+		 width: 100%;  /* The width is the width of the web page */
+		}
+	 </style>
+<div class="panel panel-headline">
+	<div class="panel-heading">
+		<h3 class="panel-title">Statistical Overview</h3>
+	</div>
+	<div class="panel-body">
+		<div class="row">
+			<div class="col-md-4">
+				<div class="metric">
+					<span class="icon"><i class="fa fa-info-circle" style="font-size:130%; margin-top: 0.5em;"></i></span>
+					<p>
+						<span class="number">{{ data['total_issues'] }}</span>
+						<span class="title">Total Issues</span>
+					</p>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="metric">
+					<span class="icon"><i class="fa fa-clock-o" style="font-size:130%; margin-top: 0.5em;"></i></span>
+					<p>
+						<span class="number">{{ data['urgent_issues'] }}</span>
+						<span class="title">Urgent Issues</span>
+					</p>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="metric">
+					<span class="icon"><i class="fa fa-eye"></i></span>
+					<p>
+						<span class="number">{{ data['activity'] }}</span>
+						<span class="title">Visits/User Activities</span>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-6">
+		<!-- Map comes here-->
+		<div id="map"></div>
+		<!--Map Ends Here-->
+	</div>
+	<div class="col-md-6">
+			<div class="container" style="max-width:570px; overflow-x:scroll;">
+				<!-- RECENT Cards -->
+				<div class="panel">
+					<div class="panel-heading">
+						<h3 class="panel-title">Recent Issues</h3>
+						<div class="right">
+							<button type="button" class="btn-toggle-collapse"><i class="lnr lnr-chevron-up"></i></button>
+							<button type="button" class="btn-remove"><i class="lnr lnr-cross"></i></button>
+						</div>
+					</div>
+					<div class="panel-body no-padding">
+						<table class="table table-striped table-sm table-responsive">
+							<thead>
+								<tr>
+									<th>Issue Num.</th>
+									<th>Category</th>
+									<th>Date &amp; Time</th>
+									<th>Status</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for x in data['recent'] %}
+								<tr>
+									<td><a href="#">{{ x['card_id'] }}</a></td>
+									<td>{{x['category']}}</td>
+									<td>{{x['timestamp']}}</td>
+									<td><span class="label label-default">{{x['status']}}</span></td>
+								</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+					<div class="panel-footer">
+						<div class="row">
+							<div class="col-md-6"><span class="panel-note"><i class="fa fa-clock-o"></i> Last 24 hours</span></div>
+							<div class="col-md-6 text-right"><a href="issues" class="btn btn-primary">View All Issues</a></div>
+						</div>
+					</div>
+					<!-- END RECENT Cards -->
+				</div>
+			</div>
+		</div>
+</div>
+
+<script>
+		// Initialize and add the map
+function initMap() {
+	
+	var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	
+	
+
+// The location of mumbai
+var mumbai = {lat: 19.135879, lng: 72.886196};
+
+let coords = [ 
+				{% for x in data['markers'] %}
+				{ 'lat': {{x['lat']}}, 'lng' : {{x['lng']}} },
+				{% endfor %} 
+			];
+
+	// // The map, centered at mumbai
+	var map = new google.maps.Map(
+		document.getElementById('map'), {zoom: 10, center: mumbai});
+	// // The marker, positioned at mumbai
+	
+    
+	var markers = coords.map(function(location, i) {
+		return new google.maps.Marker({
+		position: location,
+		label: labels[i % labels.length],
+		map: map
+		});
+    });
+
+	// var marker = new google.maps.Marker({position: mumbai, map: map});
+}
+	
+	</script>
+	<!--Load the API from the specified URL
+	* The async attribute allows the browser to render the page while the API loads
+	* The key parameter will contain your own API key (which is not needed for this tutorial)
+	* The callback parameter executes the initMap() function
+	-->
+	<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
+    </script>
+	<script async defer
+	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZShSU-ew_wZxGfZcPB8IkyLDq1FuSE0Q&callback=initMap">
+	</script>
+{% endblock %}
