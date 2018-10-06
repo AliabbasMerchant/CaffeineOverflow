@@ -33,7 +33,7 @@ import java.util.List;
 
 public class RecentFeedFragment extends Fragment {
 
-    private static final String TAG = "RecentFeedFragment";
+    private static final String TAG = "MapFeedFragment";
     public RecentFeedFragment() {
         // Required empty public constructor
     }

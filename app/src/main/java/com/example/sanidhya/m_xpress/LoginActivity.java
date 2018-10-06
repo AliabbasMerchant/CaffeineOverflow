@@ -37,7 +37,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     FirebaseAuth.AuthStateListener authStateListener;
     SharedPreferences.Editor editor;
-
+    String user_token;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +71,7 @@ public class LoginActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<GetTokenResult> task) {
                                 if (task.isSuccessful()) {
                                     String idToken = task.getResult().getToken();
+                                    user_token = idToken;
                                     editor.putString(Constants.UID_PREF, idToken);
                                 } else {
                                     // Handle error -> task.getException();
@@ -123,6 +124,7 @@ public class LoginActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<GetTokenResult> task) {
                                 if (task.isSuccessful()) {
                                     String idToken = task.getResult().getToken();
+                                    user_token = idToken;
                                     editor.putString(Constants.UID_PREF, idToken);
                                 } else {
                                     // Handle error -> task.getException();
@@ -155,7 +157,7 @@ public class LoginActivity extends AppCompatActivity {
         String TokenID = sp.getString(Constants.UID_PREF, null);
         if(TokenID != null) {
             RequestQueue queue = Volley.newRequestQueue(this);
-            String URL = Constants.LOGIN_URL; // TODO
+            String URL = Constants.LOGIN_URL+"?user_id="+user_token;
             StringRequest sr = new StringRequest(Request.Method.GET, URL, response -> {
                 Log.e(TAG, "onResponse: " + response);
             }, error -> Toast.makeText(this, "That didn't work!", Toast.LENGTH_SHORT).show());

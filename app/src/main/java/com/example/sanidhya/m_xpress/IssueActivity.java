@@ -1,6 +1,7 @@
 package com.example.sanidhya.m_xpress;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -11,16 +12,25 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.sanidhya.m_xpress.Adapters.FeedListAdapter;
 import com.example.sanidhya.m_xpress.Adapters.CommentAdapter;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class IssueActivity extends AppCompatActivity {
     JSONObject generalData, commentData;
@@ -60,7 +70,7 @@ public class IssueActivity extends AppCompatActivity {
 
         inflateGeneralData();
         inflateComments();
-        userHasVoted = hasUserVoted(_id);
+        hasUserVoted(_id);
         if(userHasVoted) {
             upvote_count.setTextColor(getResources().getColor(R.color.upvoteColor));
         }
@@ -91,7 +101,6 @@ public class IssueActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
     }
     public void inflateComments() {
         RecyclerView recyclerView = findViewById(R.id.comments_recycler_view);
@@ -111,34 +120,80 @@ public class IssueActivity extends AppCompatActivity {
         }
         upvote_count.setText(Integer.toString(votes));
     }
-    public boolean hasUserVoted(int _id) {
-        return false;
-        // todo
+    public void hasUserVoted(int _id) {
+//        RequestQueue queue = Volley.newRequestQueue(this);
+//        String URL = Constants.FEED_URL;
+//        StringRequest sr = new StringRequest(Request.Method.GET, URL, response -> {
+//            Log.e(TAG, "onResponse: " + response);
+//            if(response.equals("1")) {
+//                userHasVoted = true;
+//            }
+//        }, error -> Toast.makeText(this, "That didn't work!", Toast.LENGTH_SHORT).show());
+//        queue.add(sr);
+        userHasVoted = false;
     }
     public ArrayList<Comment> getComments(int _id) {
-        return new ArrayList<Comment>();
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String URL = Constants.COMMENTS_URL + "?card_id=" + _id;
+        StringRequest sr = new StringRequest(Request.Method.GET, URL, response -> {
+            Log.e(TAG, "onResponse: " + response);
+            JSONObject jsonObject;
+            try {
+                jsonObject = new JSONObject(response);
+                // todo
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }, error -> Toast.makeText(this, "That didn't work!", Toast.LENGTH_SHORT).show());
+        queue.add(sr);
+        return new ArrayList<>();
     }
+
     @Override
     public void onBackPressed() {
         try {
             if(generalData.getInt("upvotes")!= votes) {
+                String URL;
                 if(generalData.getInt("upvotes")> votes) {
-                    // TODO upvote
+//                    URL = Constants.FEED_URL; //downvote
                 }
                 else {
-                    // TODO downvote
+//                    URL = Constants.FEED_URL; //upvote
                 }
+//                RequestQueue queue = Volley.newRequestQueue(this);
+//                StringRequest sr = new StringRequest(Request.Method.GET, URL, response -> {
+//                    Log.e(TAG, "onResponse: " + response);
+//                }, error -> Toast.makeText(this, "That didn't work!", Toast.LENGTH_SHORT).show());
             }
-        } catch (JSONException e) {// TODO vote
+        } catch (JSONException e) {
             e.printStackTrace();
         }
     }
     public void onLocationPressed(View view) {
-        double latitude = 0, longitude = 0;
-        // todo
-        String url = "https://www.google.com/maps/search/?api=1&query="+latitude+","+longitude;
-        Intent intent = new Intent(android.content.Intent.ACTION_VIEW,  Uri.parse(url));
-        startActivity(intent);
+        try {
+            double latitude = generalData.getDouble("lat"), longitude = generalData.getDouble("lng");
+            String url = "https://www.google.com/maps/search/?api=1&query="+latitude+","+longitude;
+            Intent intent = new Intent(android.content.Intent.ACTION_VIEW,  Uri.parse(url));
+            startActivity(intent);
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
-
+    public void upload_comment(String text) {
+        String _id = getSharedPreferences(Constants.PREFERENCES, MODE_PRIVATE).getString(Constants.UID_PREF, "");
+        if(_id != null) {
+            RequestQueue queue = Volley.newRequestQueue(this);
+            String URL = Constants.COMMENT_URL + "?card_id=" + _id + "&user_id=" + _id + "&text=" + text;
+            StringRequest sr = new StringRequest(Request.Method.GET, URL, response -> {
+                Log.e(TAG, "onResponse: " + response);
+            }, error -> Toast.makeText(this, "That didn't work!", Toast.LENGTH_SHORT).show());
+            queue.add(sr);
+        }
+        else {
+            Toast.makeText(this, "Please Login!", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
+    }
 }

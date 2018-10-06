@@ -42,6 +42,14 @@ public class AddIssueActivity extends AppCompatActivity {
     }
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
+    public void onClickPost(View view) {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String URL = Constants.FEED_URL; // TODO
+        StringRequest sr = new StringRequest(Request.Method.GET, URL, response -> {
+            Log.e(TAG, "onResponse: " + response);
+        }, error -> Toast.makeText(this, "That didn't work!", Toast.LENGTH_SHORT).show());
+        queue.add(sr);
+    }
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
