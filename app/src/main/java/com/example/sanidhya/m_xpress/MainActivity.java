@@ -94,8 +94,10 @@ public class MainActivity extends AppCompatActivity {
                                     break;
             case R.id.drawer_account : Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                                     startActivity(intent);
-
-                                    return;
+                                    break;
+            case R.id.drawer_setting : Intent i = new Intent(MainActivity.this, IssueActivity.class);
+                                    startActivity(i);
+                                    break;
         }
 //        transaction.replace(R.id.fragment_container, new NearbyIssuesFragment());
         Log.d("TestLog","Transaction created");
